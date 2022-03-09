@@ -29,18 +29,18 @@ export const columns: readonly Column[] = [
         id: 'message',
         label: 'Message',
         minWidth: 90,
-        align: 'right',
+        align: 'center',
     },
     {
         id: 'hostname',
         label: 'Hostname',
         minWidth: 90,
-        align: 'right',
+        align: 'center',
     },
     {
         id: 'time',
         label: 'Time',
         minWidth: 90,
-        align: 'right',
+        align: 'center',
     }
 ];

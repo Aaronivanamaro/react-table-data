@@ -11,5 +11,5 @@ export interface Column {
     id: 'id' | 'name' | 'success' | 'message' | 'hostname' | 'time';
     label: string;
     minWidth?: number;
-    align?: 'right';
+    align?: 'left' | 'center' | 'right';
 }
