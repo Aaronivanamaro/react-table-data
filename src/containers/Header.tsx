@@ -23,7 +23,6 @@ const Header: FC = ({ children }) => {
             Status Page
           </Typography>
           { children }
-          {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>
     </Box>

@@ -17,6 +17,8 @@ import { LinearProgress } from '@mui/material';
 const TableComponent = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  // Change the line below if you want to set a new interval. Currently, its value is 15 seconds. 
+  // Please set it in miliseconds (ms). Example: 10 seconds === 10000 ms.
   const [delay, setInterval] = useState(15000);
   const { isLoading, rows } = useAxiosWithInterval(delay);
 
