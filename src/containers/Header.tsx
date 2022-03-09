@@ -4,8 +4,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import { FC } from 'react';
 
-export default function Header() {
+const Header: FC = ({ children }) => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -21,9 +22,12 @@ export default function Header() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Status Page
           </Typography>
-          <Button color="inherit">Login</Button>
+          { children }
+          {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
+
+export default Header;

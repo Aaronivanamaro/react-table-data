@@ -1,26 +1,39 @@
 import Header from "./containers/Header";
-import Main from "./containers/Main";
+import Layout from "./containers/Layout";
 import TableComponent from "./components/TableComponent";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Container } from "@mui/material";
+import ToggleBtnComponent from './components/ToggleBtnComponent';
+import { createTheme } from '@mui/material/styles';
+import { useMemo, useState } from "react";
 
 function App() {
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-    },
-  });
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const colorMode = useMemo(
+      () => ({
+          toggleColorMode: () => {
+              setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+          },
+      }),
+      [],
+  );
+
+  const theme = useMemo(
+      () =>
+          createTheme({
+              palette: {
+                  mode,
+              },
+          }),
+      [mode],
+  );
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Container>
-        <Header />
-        <Main>
-          <TableComponent />
-        </Main>
-      </Container>
-    </ThemeProvider>
+    <Layout theme={theme}>
+      <Header>
+        <ToggleBtnComponent onClick={colorMode.toggleColorMode} themeMode={theme.palette.mode}/>
+      </Header>
+      <TableComponent />
+    </Layout>
   );
 }
 
