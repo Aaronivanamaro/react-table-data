@@ -1,6 +1,6 @@
-import DataTable from "./components/DataTable";
 import Header from "./containers/Header";
 import Main from "./containers/Main";
+import TableComponent from "./components/TableComponent";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container } from "@mui/material";
 
@@ -17,7 +17,7 @@ function App() {
       <Container>
         <Header />
         <Main>
-          <DataTable />
+          <TableComponent />
         </Main>
       </Container>
     </ThemeProvider>

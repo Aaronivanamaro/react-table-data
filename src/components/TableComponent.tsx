@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,101 +9,15 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useAxios } from '../hooks/useAxios';
-import axios from 'axios';
-import useInterval from '../hooks/useInterval';
+import { columns } from '../data/tableData';
+import { Data } from '../interfaces/interfaces';
+import useAxiosWithInterval from '../hooks/useAxiosWithInterval';
 
-interface Column {
-  id: 'id' | 'name' | 'success' | 'message' | 'hostname' | 'time';
-  label: string;
-  minWidth?: number;
-  align?: 'right';
-  // format?: (value: number) => string;
-}
-
-const columns: readonly Column[] = [
-  { id: 'id', label: 'Id', minWidth: 20 },
-  { id: 'name', label: 'Name', minWidth: 30 },
-  { id: 'success', label: 'Status', minWidth: 20 },
-  {
-    id: 'message',
-    label: 'Message',
-    minWidth: 90,
-    align: 'right',
-  },
-  {
-    id: 'hostname',
-    label: 'Hostname',
-    minWidth: 90,
-    align: 'right',
-  },
-  {
-    id: 'time',
-    label: 'Time',
-    minWidth: 90,
-    align: 'right',
-    // format: (value: number) => new Date(value).toString(),
-  }
-];
-
-interface Data {
-  id: number;
-  name: string;
-  success: boolean;
-  message: string;
-  hostname: string;
-  time: number;
-}
-
-const API_NAMES = [
-  'Accounts',
-  'Assets',
-  'Customers',
-  'Datapoints',
-  'Devices',
-  'Documents',
-  'Forms',
-  'Invites',
-  'Media',
-  'Messages',
-  'Namespaces',
-  'Orders',
-  'Patients',
-  'Relationships',
-  'Rules',
-  'Templates',
-  'Users',
-  'Workflows'
-];
-
-const DataTable = () => {
+const TableComponent = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [rows, setRows] = useState<any>([]);
-
-  useInterval(() => {
-    setRows([]);
-    API_NAMES.forEach(async (API_NAME: string, index: number) => {
-      const api_name = await API_NAME.toLowerCase();
-      try {
-        const status = await axios(`https://api.factoryfour.com/${api_name}/health/status`);
-        const statusObj = await { id: index + 1, name: API_NAME, ...status.data };
-        setRows((prevState: any) => [...prevState, statusObj]);
-      }
-      catch (error: any) {
-        let message = await error.response ? `Response Error: ${error.response.status}` : error.request ? 'Request Error' : error.message || 'Error';
-        const statusObj = {
-          id: index + 1,
-          name: API_NAME,
-          success: false,
-          message,
-          hostname: 'Not Available',
-          time: 'Not Available'
-        };
-        setRows((prevState: any) => [...prevState, statusObj]);
-      }
-    });
-  }, 15000);
+  const [delay, setInterval] = useState(15000);
+  const rows: Data[] = useAxiosWithInterval(delay);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -134,7 +48,7 @@ const DataTable = () => {
           <TableBody>
             {rows !== [] ? rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .sort((a: any, b: any) => (a.id > b.id) ? 1 : -1)
+              .sort((a: Data, b: Data) => (a.id > b.id) ? 1 : -1)
               .map((row: Data) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
@@ -168,4 +82,4 @@ const DataTable = () => {
   )
 };
 
-export default DataTable;
+export default TableComponent;
