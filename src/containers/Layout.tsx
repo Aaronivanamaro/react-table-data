@@ -6,8 +6,8 @@ interface Props {
     children: JSX.Element[];
     theme: {
         palette: {
-            mode: string,
-        },
+            mode: string
+        }
     }
 }
 

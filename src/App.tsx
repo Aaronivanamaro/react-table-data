@@ -1,9 +1,9 @@
+import { useMemo, useState } from "react";
+import { createTheme } from '@mui/material/styles';
 import Header from "./containers/Header";
 import Layout from "./containers/Layout";
 import TableComponent from "./components/TableComponent";
 import ToggleBtnComponent from './components/ToggleBtnComponent';
-import { createTheme } from '@mui/material/styles';
-import { useMemo, useState } from "react";
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
       () => ({
           toggleColorMode: () => {
               setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-          },
+          }
       }),
       [],
   );
@@ -21,7 +21,7 @@ function App() {
       () =>
           createTheme({
               palette: {
-                  mode,
+                  mode
               },
           }),
       [mode],

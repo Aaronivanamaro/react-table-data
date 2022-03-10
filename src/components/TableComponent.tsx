@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { Data } from '../interfaces/interfaces';
+import useAxiosWithInterval from '../hooks/useAxiosWithInterval';
+import { columns } from '../data/tableData';
+import parseDate from '../utils/parseDate';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,16 +13,13 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { columns } from '../data/tableData';
-import { Data } from '../interfaces/interfaces';
-import useAxiosWithInterval from '../hooks/useAxiosWithInterval';
-import { LinearProgress } from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const TableComponent = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   // Change the line below if you want to set a new interval. Currently, its value is 15 seconds. 
-  // Please set it in miliseconds (ms). Example: 10 seconds === 10000 ms.
+  // Please set it in milliseconds (ms). Example: 10 seconds === 10000 ms.
   const [delay, setInterval] = useState(15000);
   const { isLoading, rows } = useAxiosWithInterval(delay);
 
@@ -61,7 +62,7 @@ const TableComponent = () => {
                         return (
                           <TableCell key={column.id} align={column.align}>
                             {typeof value === 'boolean' ? (value === true ? <CheckCircleIcon color='success' /> : <CancelIcon color='error' />)
-                              : (value === row['time'] && row.success === true ? new Date(value).toString() : value)}
+                              : (value === row['time'] && row.success === true ? parseDate(value) : value)}
                           </TableCell>
                         );
                       })}

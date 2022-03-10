@@ -9,6 +9,7 @@ const useAxios: Function = (API_NAMES: string[], setData: Function, setIsLoading
 
         API_NAMES.forEach(async (API_NAME: string, index: number) => {
             const api_name = API_NAME.toLowerCase();
+            
             try {
                 const url = `https://api.factoryfour.com/${api_name}/health/status`;
                 const status = await axios(url);
