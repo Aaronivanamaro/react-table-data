@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import { createTheme } from '@mui/material/styles';
+import useDarkMode from "./hooks/useDarkMode";
 import Header from "./containers/Header";
 import Layout from "./containers/Layout";
 import TableComponent from "./components/TableComponent";
@@ -7,25 +6,7 @@ import ToggleBtnComponent from './components/ToggleBtnComponent';
 
 function App() {
 
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
-  const colorMode = useMemo(
-      () => ({
-          toggleColorMode: () => {
-              setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-          }
-      }),
-      [],
-  );
-
-  const theme = useMemo(
-      () =>
-          createTheme({
-              palette: {
-                  mode
-              },
-          }),
-      [mode],
-  );
+  const { theme, colorMode } = useDarkMode();
 
   return (
     <Layout theme={theme}>
