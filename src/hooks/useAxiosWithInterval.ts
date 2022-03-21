@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAxios from "./useAxios";
 import useInterval from "./useInterval";
 import { API_NAMES } from "../data/tableData";
@@ -10,13 +10,9 @@ const useAxiosWithInterval: Function = (delay: number) => {
     const [isLoading, setIsLoading] = useState(false);
     const getData = useAxios(API_NAMES, setRows, setIsLoading);
 
-    useEffect(() => {
-        getData();
-    }, []);
-
     useInterval(() => {
         getData();
-    }, delay);
+    }, delay, true);
 
     return { isLoading, rows };
 };
