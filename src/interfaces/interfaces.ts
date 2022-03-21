@@ -4,7 +4,7 @@ export interface Data {
     success: boolean;
     message: string;
     hostname: string;
-    time: number;
+    time: number | string;
 }
 
 export interface Column {

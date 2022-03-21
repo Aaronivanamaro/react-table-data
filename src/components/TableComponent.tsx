@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Data } from '../interfaces/interfaces';
+import { useState, useCallback } from 'react';
 import useAxiosWithInterval from '../hooks/useAxiosWithInterval';
+import useWindowResizeEvent from '../hooks/useWindowResizeEvent';
+import { Data } from '../interfaces/interfaces';
 import { columns } from '../data/tableData';
 import parseDate from '../utils/parseDate';
 import Paper from '@mui/material/Paper';
@@ -22,51 +23,77 @@ const TableComponent = () => {
   // Please set it in milliseconds (ms). Example: 10 seconds === 10000 ms.
   const [delay, setInterval] = useState(15000);
   const { isLoading, rows } = useAxiosWithInterval(delay);
+  const innerWidth = useWindowResizeEvent(); 
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  const handleChangePage = useCallback((event: unknown, newPage: number) => setPage(newPage), []);
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-  };
+  }, []);
 
   return (
     isLoading ? <LinearProgress /> :
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+            { innerWidth < 525 ? null :
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+            }
             <TableBody>
               {rows !== [] ? rows
                 .sort((a: Data, b: Data) => (a.id > b.id) ? 1 : -1)
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row: Data) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {typeof value === 'boolean' ? (value === true ? <CheckCircleIcon color='success' /> : <CancelIcon color='error' />)
-                              : (value === row['time'] && row.success === true ? parseDate(value) : value)}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
+                    innerWidth < 525 ?
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                        <td style={{
+                          padding: '1rem',
+                          borderTop: `solid 0.004px rgba(195, 193, 190, 0.4)`,
+                        }}>
+                          {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                              <div key={column.id} style={{
+                                justifyContent: 'left',
+                                display: 'flex',
+                                gap: '.4rem',
+                                margin: 'auto'
+                              }}>
+                                <div style={{ fontWeight: 'bold' }} >{column.label} :</div>
+                                <div key={column.id}>
+                                  {typeof value === 'boolean' ? (value === true ? <CheckCircleIcon color='success' sx={{fontSize: '17px'}} /> : <CancelIcon color='error' sx={{fontSize: '17px'}} />)
+                                    : (value === row['time'] && row.success === true && typeof value === 'number' ? parseDate(value) : value)}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </td>
+                      </TableRow>
+                      : <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {typeof value === 'boolean' ? (value === true ? <CheckCircleIcon color='success' /> : <CancelIcon color='error' />)
+                                : (value === row['time'] && row.success === true && typeof value === 'number' ? parseDate(value) : value)}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
                   );
                 })
                 : null
@@ -82,6 +109,7 @@ const TableComponent = () => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage={innerWidth < 525 ? "" : "Rows per page:"}
         />
       </Paper>
   )

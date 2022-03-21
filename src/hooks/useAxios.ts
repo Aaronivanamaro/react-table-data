@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { useCallback } from 'react';
 import { Data } from '../interfaces/interfaces';
 
 const useAxios: Function = (API_NAMES: string[], setData: Function, setIsLoading: Function) => {
 
-    const getData = () => {
+    const getData = useCallback(() => {
         setData([]);
         setIsLoading(true);
 
@@ -37,7 +38,8 @@ const useAxios: Function = (API_NAMES: string[], setData: Function, setIsLoading
         });
         
         setTimeout(() => setIsLoading(false), 500);
-    }
+    }, [API_NAMES]);
+
     return getData;
 };
 

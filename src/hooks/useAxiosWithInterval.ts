@@ -12,7 +12,7 @@ const useAxiosWithInterval: Function = (delay: number) => {
 
     useEffect(() => {
         getData();
-    }, [API_NAMES]);
+    }, []);
 
     useInterval(() => {
         getData();

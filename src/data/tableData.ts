@@ -22,9 +22,8 @@ export const API_NAMES = [
 ];
 
 export const columns: readonly Column[] = [
-    { id: 'id', label: 'Id', minWidth: 20 },
-    { id: 'name', label: 'Name', minWidth: 30 },
-    { id: 'success', label: 'Status', minWidth: 20 },
+    { id: 'name', label: 'Name', minWidth: 30, align: 'left' },
+    { id: 'success', label: 'Status', minWidth: 20, align: 'center' },
     {
         id: 'message',
         label: 'Message',
