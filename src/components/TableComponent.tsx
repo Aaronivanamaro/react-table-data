@@ -21,8 +21,7 @@ const TableComponent = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   // Change the line below if you want to set a new interval. Currently, its value is 15 seconds. 
   // Please set it in milliseconds (ms). Example: 10 seconds === 10000 ms.
-  const [delay, setDelay] = useState(15000);
-  const { isLoading, rows } = useAxiosWithInterval(delay);
+  const { isLoading, rows } = useAxiosWithInterval(15000);
   const innerWidth = useWindowResizeEvent(); 
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => setPage(newPage), []);
